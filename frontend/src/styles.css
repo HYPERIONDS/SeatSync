@@ -1,0 +1,12 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { margin: 0; min-width: 320px; background: #07130f; }
+  ::selection { background: #7fffc4; color: #07130f; }
+}
+@layer components {
+  .input { @apply w-full rounded-xl border border-white/10 bg-ink/60 px-4 py-3 text-sm text-cream outline-none transition placeholder:text-white/25 focus:border-mint/60; }
+}
