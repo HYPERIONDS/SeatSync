@@ -1,0 +1,27 @@
+{
+  "info": {
+    "name": "SeatSync API",
+    "description": "Concurrent ticket booking. All payments are simulations; no real money is processed.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8000/api/v1"},
+    {"key": "accessToken", "value": ""},
+    {"key": "eventId", "value": ""},
+    {"key": "showId", "value": ""},
+    {"key": "seatId", "value": ""},
+    {"key": "holdId", "value": ""}
+  ],
+  "item": [
+    {"name": "Register", "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"email\":\"postman@example.com\",\"password\":\"Postman123!\",\"full_name\":\"Postman User\",\"role\":\"CUSTOMER\"}"}, "url": "{{baseUrl}}/auth/register"}},
+    {"name": "Login", "event": [{"listen": "test", "script": {"exec": ["pm.collectionVariables.set('accessToken', pm.response.json().access_token);"]}}], "request": {"method": "POST", "header": [{"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"email\":\"postman@example.com\",\"password\":\"Postman123!\"}"}, "url": "{{baseUrl}}/auth/login"}},
+    {"name": "Browse events", "request": {"method": "GET", "url": "{{baseUrl}}/events?page=1&page_size=12&sort=date_asc"}},
+    {"name": "Event details", "request": {"method": "GET", "url": "{{baseUrl}}/events/{{eventId}}"}},
+    {"name": "Seat map", "request": {"method": "GET", "url": "{{baseUrl}}/shows/{{showId}}/seats"}},
+    {"name": "Hold seat", "event": [{"listen": "test", "script": {"exec": ["pm.collectionVariables.set('holdId', pm.response.json().hold_id);"]}}], "request": {"method": "POST", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}, {"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"show_id\":\"{{showId}}\",\"seat_ids\":[\"{{seatId}}\"]}"}, "url": "{{baseUrl}}/holds"}},
+    {"name": "Confirm booking", "request": {"method": "POST", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}, {"key": "Idempotency-Key", "value": "{{$guid}}"}, {"key": "Content-Type", "value": "application/json"}], "body": {"mode": "raw", "raw": "{\"hold_id\":\"{{holdId}}\",\"payment_outcome\":\"SUCCESS\"}"}, "url": "{{baseUrl}}/bookings/confirm"}},
+    {"name": "My bookings", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}], "url": "{{baseUrl}}/bookings/me"}},
+    {"name": "Organizer dashboard", "request": {"method": "GET", "header": [{"key": "Authorization", "value": "Bearer {{accessToken}}"}], "url": "{{baseUrl}}/organizer/dashboard"}}
+  ]
+}
+

@@ -1,0 +1,15 @@
+{
+  "attempts": 50,
+  "hold_race": {
+    "successful": 1,
+    "rejected": 49,
+    "failed": 0
+  },
+  "database_confirmation_race_with_stale_redis": {
+    "successful": 1,
+    "rejected": 49,
+    "failed": 0
+  },
+  "confirmed_booking_seat_rows": 1,
+  "result": "PASS"
+}
